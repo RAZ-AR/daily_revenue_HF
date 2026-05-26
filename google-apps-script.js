@@ -1,3 +1,4 @@
+const SPREADSHEET_ID = "13Cz2uUGh2l86X3il5zGYnd4Th_hcDewaxSz2p2RjSOQ";
 const SHEET_NAME_REPORTS = "Отчеты";
 const SHEET_NAME_EXPENSES = "Расходы";
 
@@ -16,7 +17,7 @@ function doGet(event) {
 function doPost(event) {
   try {
     const payload = JSON.parse(event.postData.contents);
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const reportsSheet = getSheet(spreadsheet, SHEET_NAME_REPORTS, [
       "Дата отправки",
       "Дата",
@@ -86,7 +87,7 @@ function getSheet(spreadsheet, name, headers) {
 }
 
 function getMorningBalance(date) {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = spreadsheet.getSheetByName(SHEET_NAME_REPORTS);
   if (!sheet || sheet.getLastRow() < 2) return 0;
 
