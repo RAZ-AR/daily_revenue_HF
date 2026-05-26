@@ -24,6 +24,7 @@ function doPost(event) {
       "Карта",
       "Доставка",
       "Наличные",
+      "Итог за день",
       "Расходы",
       "Наличные нарастающим итогом"
     ]);
@@ -42,6 +43,7 @@ function doPost(event) {
       payload.sales.card,
       payload.sales.delivery,
       payload.sales.cash,
+      getDailyTotal(payload),
       payload.cash.expenseTotal,
       payload.cash.finalCash
     ]);
@@ -79,14 +81,14 @@ function getMorningBalance(date) {
   const sheet = spreadsheet.getSheetByName(SHEET_NAME_REPORTS);
   if (!sheet || sheet.getLastRow() < 2) return 0;
 
-  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 7).getValues();
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 8).getValues();
   const targetDate = new Date(`${date}T00:00:00`);
   let latestDate = null;
   let latestBalance = 0;
 
   rows.forEach((row) => {
     const reportDate = normalizeDate(row[0]);
-    const finalCash = Number(row[6]) || 0;
+    const finalCash = Number(row[7]) || 0;
     if (!reportDate || reportDate >= targetDate) return;
     if (!latestDate || reportDate > latestDate) {
       latestDate = reportDate;
@@ -95,6 +97,13 @@ function getMorningBalance(date) {
   });
 
   return latestBalance;
+}
+
+function getDailyTotal(payload) {
+  if (payload.dailyTotal !== undefined) return Number(payload.dailyTotal) || 0;
+  return (Number(payload.sales.card) || 0)
+    + (Number(payload.sales.delivery) || 0)
+    + (Number(payload.sales.cash) || 0);
 }
 
 function normalizeDate(value) {

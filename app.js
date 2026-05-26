@@ -34,6 +34,7 @@ const summary = {
   morningBalance: document.querySelector("#morningBalanceText"),
   cashToday: document.querySelector("#cashTodayText"),
   expenseTotal: document.querySelector("#expenseTotalText"),
+  dailyTotal: document.querySelector("#dailyTotalText"),
   expectedCash: document.querySelector("#expectedCashText"),
   finalCash: document.querySelector("#finalCashText")
 };
@@ -142,13 +143,19 @@ function getExpenses() {
 function getTotals() {
   const expenses = getExpenses();
   const expenseTotal = expenses.reduce((sum, item) => sum + item.amount, 0);
+  const cardToday = numberValue(fields.cardSales.value);
+  const deliveryToday = numberValue(fields.deliverySales.value);
   const cashToday = numberValue(fields.cashSales.value);
+  const dailyTotal = cardToday + deliveryToday + cashToday;
   const expectedCash = morningBalance + cashToday - expenseTotal;
   const adjustment = numberValue(fields.cashAdjustment.value);
 
   return {
+    cardToday,
+    deliveryToday,
     expenseTotal,
     cashToday,
+    dailyTotal,
     expectedCash,
     adjustment,
     finalCash: expectedCash + adjustment
@@ -160,6 +167,7 @@ function updateSummary() {
   summary.morningBalance.textContent = money(morningBalance);
   summary.cashToday.textContent = money(totals.cashToday);
   summary.expenseTotal.textContent = money(totals.expenseTotal);
+  summary.dailyTotal.textContent = money(totals.dailyTotal);
   summary.expectedCash.textContent = money(totals.expectedCash);
   summary.finalCash.textContent = money(totals.finalCash);
 }
@@ -171,8 +179,8 @@ function getPayload() {
     date: fields.date.value,
     employee: fields.employee.value.trim(),
     sales: {
-      card: numberValue(fields.cardSales.value),
-      delivery: numberValue(fields.deliverySales.value),
+      card: totals.cardToday,
+      delivery: totals.deliveryToday,
       cash: totals.cashToday
     },
     expenses: getExpenses().filter((expense) => expense.amount || expense.description),
@@ -183,6 +191,7 @@ function getPayload() {
       adjustment: totals.adjustment,
       finalCash: totals.finalCash
     },
+    dailyTotal: totals.dailyTotal,
     comment: fields.comment.value.trim(),
     submittedAt: new Date().toISOString()
   };
