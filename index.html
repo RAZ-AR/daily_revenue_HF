@@ -102,6 +102,23 @@
         </footer>
       </form>
 
+      <section id="successScreen" class="success-card is-hidden" aria-live="polite">
+        <div class="success-mark">✓</div>
+        <p class="eyebrow">Готово</p>
+        <h2>Отчет принят</h2>
+        <div class="success-details">
+          <div>
+            <span>Дата</span>
+            <strong id="successDate"></strong>
+          </div>
+          <div>
+            <span>Сотрудник</span>
+            <strong id="successEmployee"></strong>
+          </div>
+        </div>
+        <button class="primary success-button" id="newReportBtn" type="button">Новый отчет</button>
+      </section>
+
       <aside class="status-panel" id="statusPanel" role="status" aria-live="polite"></aside>
     </main>
 
@@ -129,7 +146,7 @@
       </article>
     </template>
 
-    <script src="config.js?v=2"></script>
-    <script src="app.js?v=2"></script>
+    <script src="config.js?v=3"></script>
+    <script src="app.js?v=3"></script>
   </body>
 </html>

@@ -13,6 +13,10 @@ const addExpenseBtn = document.querySelector("#addExpense");
 const expensesList = document.querySelector("#expensesList");
 const emptyExpenses = document.querySelector("#emptyExpenses");
 const expenseTemplate = document.querySelector("#expenseTemplate");
+const successScreen = document.querySelector("#successScreen");
+const successDate = document.querySelector("#successDate");
+const successEmployee = document.querySelector("#successEmployee");
+const newReportBtn = document.querySelector("#newReportBtn");
 
 const fields = {
   date: document.querySelector("#date"),
@@ -54,6 +58,7 @@ function init() {
   addExpenseBtn.addEventListener("click", () => addExpense());
   backBtn.addEventListener("click", goBack);
   nextBtn.addEventListener("click", goNext);
+  newReportBtn.addEventListener("click", startNewReport);
   form.addEventListener("submit", submitReport);
 }
 
@@ -270,7 +275,7 @@ async function submitReport(event) {
     updateExpenseVisibility();
     updateScreen();
     updateSummary();
-    setStatus(`Отчет за ${formatDate(payload.date)} от ${payload.employee} отправлен.`, "success");
+    showSuccess(payload);
   } catch (error) {
     setStatus(`Не получилось отправить отчет: ${error.message}`, "error");
   } finally {
@@ -282,6 +287,25 @@ function setStatus(message, type = "") {
   statusPanel.textContent = message;
   statusPanel.className = "status-panel";
   if (type) statusPanel.classList.add(`is-${type}`);
+}
+
+function showSuccess(payload) {
+  successDate.textContent = formatDate(payload.date);
+  successEmployee.textContent = payload.employee;
+  form.classList.add("is-hidden");
+  document.querySelector(".progress").classList.add("is-hidden");
+  document.querySelector(".step-pill").classList.add("is-hidden");
+  successScreen.classList.remove("is-hidden");
+  setStatus("");
+}
+
+function startNewReport() {
+  successScreen.classList.add("is-hidden");
+  form.classList.remove("is-hidden");
+  document.querySelector(".progress").classList.remove("is-hidden");
+  document.querySelector(".step-pill").classList.remove("is-hidden");
+  setStatus("");
+  fields.employee.focus();
 }
 
 function formatDate(date) {

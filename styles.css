@@ -314,6 +314,72 @@ textarea:focus {
   color: var(--ink);
 }
 
+.success-card {
+  min-height: 610px;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: 34px 20px;
+  border: 1px solid rgba(213, 230, 240, 0.9);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow);
+  text-align: center;
+  backdrop-filter: blur(14px);
+}
+
+.success-mark {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  font-size: 42px;
+  font-weight: 900;
+  box-shadow: 0 18px 38px rgba(14, 165, 233, 0.32);
+}
+
+.success-card h2 {
+  margin-bottom: 4px;
+  font-size: 34px;
+}
+
+.success-details {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+
+.success-details div {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #f8fcff;
+}
+
+.success-details span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.success-details strong {
+  font-size: 22px;
+}
+
+.success-button {
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
 .is-hidden {
   display: none !important;
 }
