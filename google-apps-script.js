@@ -19,18 +19,13 @@ function doPost(event) {
     const payload = JSON.parse(event.postData.contents);
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const reportsSheet = getSheet(spreadsheet, SHEET_NAME_REPORTS, [
-      "Дата отправки",
-      "Дата",
+      "День",
       "Сотрудник",
       "Карта",
       "Доставка",
-      "Наличные за день",
-      "Остаток на утро",
-      "Расходы всего",
-      "Ожидаемые наличные",
-      "Корректировка",
-      "Итог в кассе",
-      "Комментарий"
+      "Наличные",
+      "Расходы",
+      "Наличные нарастающим итогом"
     ]);
     const expensesSheet = getSheet(spreadsheet, SHEET_NAME_EXPENSES, [
       "Дата отправки",
@@ -42,18 +37,13 @@ function doPost(event) {
     ]);
 
     reportsSheet.appendRow([
-      new Date(payload.submittedAt || new Date()),
       payload.date,
       payload.employee,
       payload.sales.card,
       payload.sales.delivery,
       payload.sales.cash,
-      payload.cash.morningBalance,
       payload.cash.expenseTotal,
-      payload.cash.expectedCash,
-      payload.cash.adjustment,
-      payload.cash.finalCash,
-      payload.comment
+      payload.cash.finalCash
     ]);
 
     (payload.expenses || []).forEach((expense) => {
@@ -79,9 +69,7 @@ function getSheet(spreadsheet, name, headers) {
     sheet = spreadsheet.insertSheet(name);
   }
 
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
-  }
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
 
   return sheet;
 }
@@ -91,14 +79,14 @@ function getMorningBalance(date) {
   const sheet = spreadsheet.getSheetByName(SHEET_NAME_REPORTS);
   if (!sheet || sheet.getLastRow() < 2) return 0;
 
-  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 11).getValues();
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 7).getValues();
   const targetDate = new Date(`${date}T00:00:00`);
   let latestDate = null;
   let latestBalance = 0;
 
   rows.forEach((row) => {
-    const reportDate = normalizeDate(row[1]);
-    const finalCash = Number(row[10]) || 0;
+    const reportDate = normalizeDate(row[0]);
+    const finalCash = Number(row[6]) || 0;
     if (!reportDate || reportDate >= targetDate) return;
     if (!latestDate || reportDate > latestDate) {
       latestDate = reportDate;

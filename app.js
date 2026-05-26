@@ -270,7 +270,7 @@ async function submitReport(event) {
     updateExpenseVisibility();
     updateScreen();
     updateSummary();
-    setStatus("Отчет отправлен в Google Таблицу.", "success");
+    setStatus(`Отчет за ${formatDate(payload.date)} от ${payload.employee} отправлен.`, "success");
   } catch (error) {
     setStatus(`Не получилось отправить отчет: ${error.message}`, "error");
   } finally {
@@ -282,6 +282,12 @@ function setStatus(message, type = "") {
   statusPanel.textContent = message;
   statusPanel.className = "status-panel";
   if (type) statusPanel.classList.add(`is-${type}`);
+}
+
+function formatDate(date) {
+  if (!date) return "";
+  const [year, month, day] = date.split("-");
+  return `${day}.${month}.${year}`;
 }
 
 async function fetchJson(url) {
