@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Кассовый отчет</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Ежедневный отчет</p>
+          <h1>Касса</h1>
+        </div>
+        <div class="step-pill"><span id="currentStep">1</span>/4</div>
+      </header>
+
+      <section class="progress" aria-label="Прогресс заполнения">
+        <span class="progress-dot is-active"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+      </section>
+
+      <form id="cashForm" class="form-card">
+        <section class="screen is-active" data-screen="1">
+          <h2>Смена</h2>
+          <label>
+            <span>Дата</span>
+            <input id="date" name="date" type="date" required>
+          </label>
+          <label>
+            <span>Сотрудник</span>
+            <input id="employee" name="employee" type="text" autocomplete="name" placeholder="Имя сотрудника" required>
+          </label>
+        </section>
+
+        <section class="screen" data-screen="2">
+          <h2>Выручка на сегодня</h2>
+          <label>
+            <span>Расчеты по карте</span>
+            <input id="cardSales" name="cardSales" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+          </label>
+          <label>
+            <span>Доставка</span>
+            <input id="deliverySales" name="deliverySales" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+          </label>
+          <label>
+            <span>Наличные за день</span>
+            <input id="cashSales" name="cashSales" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+          </label>
+        </section>
+
+        <section class="screen" data-screen="3">
+          <div class="screen-heading">
+            <h2>Расходы</h2>
+            <button class="icon-button" type="button" id="addExpense" aria-label="Добавить расход" title="Добавить расход">+</button>
+          </div>
+          <div id="expensesList" class="expenses-list"></div>
+          <p class="empty-note" id="emptyExpenses">Расходов пока нет</p>
+        </section>
+
+        <section class="screen" data-screen="4">
+          <h2>Данные на сегодня</h2>
+          <div class="summary-grid">
+            <div>
+              <span>Остаток на утро</span>
+              <strong id="morningBalanceText">0</strong>
+            </div>
+            <div>
+              <span>Наличные сегодня</span>
+              <strong id="cashTodayText">0</strong>
+            </div>
+            <div>
+              <span>Расходы</span>
+              <strong id="expenseTotalText">0</strong>
+            </div>
+            <div class="summary-total">
+              <span>Наличные в кассе</span>
+              <strong id="expectedCashText">0</strong>
+            </div>
+          </div>
+          <label>
+            <span>Корректировка, если не совпало</span>
+            <input id="cashAdjustment" name="cashAdjustment" type="number" inputmode="decimal" step="0.01" placeholder="0">
+          </label>
+          <div class="final-cash">
+            <span>Итог после корректировки</span>
+            <strong id="finalCashText">0</strong>
+          </div>
+          <label>
+            <span>Комментарий</span>
+            <textarea id="comment" name="comment" rows="3" placeholder="Например: недостача, пересчет, возврат"></textarea>
+          </label>
+        </section>
+
+        <footer class="actions">
+          <button class="secondary" id="backBtn" type="button">Назад</button>
+          <button class="primary" id="nextBtn" type="button">Далее</button>
+          <button class="primary is-hidden" id="submitBtn" type="submit">Отправить</button>
+        </footer>
+      </form>
+
+      <aside class="status-panel" id="statusPanel" role="status" aria-live="polite"></aside>
+    </main>
+
+    <template id="expenseTemplate">
+      <article class="expense-row">
+        <div class="expense-top">
+          <label>
+            <span>Сумма</span>
+            <input class="expense-amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+          </label>
+          <label>
+            <span>Тип</span>
+            <select class="expense-type">
+              <option value="Покупка">Покупка</option>
+              <option value="Изъятие">Изъятие</option>
+              <option value="Другое">Другое</option>
+            </select>
+          </label>
+          <button class="remove-expense" type="button" aria-label="Удалить расход" title="Удалить расход">×</button>
+        </div>
+        <label>
+          <span>Описание</span>
+          <input class="expense-description" type="text" placeholder="Что оплатили">
+        </label>
+      </article>
+    </template>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
