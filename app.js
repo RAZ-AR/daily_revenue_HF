@@ -17,6 +17,8 @@ const successScreen = document.querySelector("#successScreen");
 const successDate = document.querySelector("#successDate");
 const successEmployee = document.querySelector("#successEmployee");
 const newReportBtn = document.querySelector("#newReportBtn");
+const progressBar = document.querySelector(".progress");
+const stepPill = document.querySelector(".step-pill");
 
 const fields = {
   date: document.querySelector("#date"),
@@ -293,17 +295,26 @@ function showSuccess(payload) {
   successDate.textContent = formatDate(payload.date);
   successEmployee.textContent = payload.employee;
   form.classList.add("is-hidden");
-  document.querySelector(".progress").classList.add("is-hidden");
-  document.querySelector(".step-pill").classList.add("is-hidden");
+  form.style.display = "none";
+  progressBar.classList.add("is-hidden");
+  progressBar.style.display = "none";
+  stepPill.classList.add("is-hidden");
+  stepPill.style.display = "none";
   successScreen.classList.remove("is-hidden");
+  successScreen.style.display = "grid";
   setStatus("");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function startNewReport() {
   successScreen.classList.add("is-hidden");
+  successScreen.style.display = "";
   form.classList.remove("is-hidden");
-  document.querySelector(".progress").classList.remove("is-hidden");
-  document.querySelector(".step-pill").classList.remove("is-hidden");
+  form.style.display = "";
+  progressBar.classList.remove("is-hidden");
+  progressBar.style.display = "";
+  stepPill.classList.remove("is-hidden");
+  stepPill.style.display = "";
   setStatus("");
   fields.employee.focus();
 }
